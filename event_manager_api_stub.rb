@@ -25,7 +25,7 @@ class EventManagerAPIStub < Sinatra::Base
       end
     end
 
-    def respond(json, options={ status: 200 })
+    def respond(json, options={ :status => 200 })
       [options[:status], { "Content-Type" => "application/json" },
         MultiJson.encode(json, :pretty => true)]
     end
