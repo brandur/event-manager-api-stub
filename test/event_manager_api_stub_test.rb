@@ -53,5 +53,15 @@ describe EventManagerAPIStub do
       })
       last_response.status.must_equal 201
     end
+
+    it "GET /v1/events/:cloud gets events successfully" do
+      get "/v1/events/heroku.com"
+      MultiJson.decode(last_response.body).must_equal []
+    end
+
+    it "GET /v1/events/:cloud/:before gets events successfully" do
+      get "/v1/events/heroku.com/123412341324"
+      MultiJson.decode(last_response.body).must_equal []
+    end
   end
 end

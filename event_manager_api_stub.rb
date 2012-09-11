@@ -2,6 +2,10 @@ class EventManagerAPIStub < Sinatra::Base
   EVENT_FIELDS =
     %w{action actor attributes cloud component owner target timestamp type}
 
+  def events
+    @events ||= []
+  end
+
   helpers do
     def auth
       @auth ||= Rack::Auth::Basic::Request.new(request.env)
@@ -45,6 +49,11 @@ class EventManagerAPIStub < Sinatra::Base
   post "/v1/publish/event" do
     event = MultiJson.decode(request.body.read) rescue raise(APIError.new(400))
     compare_fields!(EVENT_FIELDS, event.keys)
+    events << event
     respond(event, :status => 201)
+  end
+
+  get "/v1/events/:cloud/?:before?" do |cloud, before|
+    MultiJson.encode(events.map { |e| e["cloud"] == cloud })
   end
 end
