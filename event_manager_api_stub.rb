@@ -2,7 +2,7 @@ require "multi_json"
 
 class EventManagerAPIStub < Sinatra::Base
   EVENT_FIELDS =
-    %w{action actor attributes cloud component owner target timestamp type}
+    %w{action actor attributes cloud component target timestamp type}
 
   def events
     @events ||= []
