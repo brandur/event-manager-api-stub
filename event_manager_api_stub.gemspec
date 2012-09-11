@@ -10,4 +10,6 @@ Gem::Specification.new do |gem|
 
   gem.require_path = '.'
   gem.files        = %w{event_manager_api_stub.rb}
+
+  gem.add_dependency "multi_json"
 end
