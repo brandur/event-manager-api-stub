@@ -56,12 +56,38 @@ describe EventManagerAPIStub do
 
     it "GET /v1/events/:cloud gets events successfully" do
       get "/v1/events/heroku.com"
-      MultiJson.decode(last_response.body).must_equal []
+      MultiJson.decode(last_response.body).must_equal({
+        "current" => "/v1/events/heroku.com/1342656521290",
+        "older"   => "/v1/events/heroku.com/1342656510101",
+        "events"  => {}
+      })
     end
 
     it "GET /v1/events/:cloud/:before gets events successfully" do
       get "/v1/events/heroku.com/123412341324"
-      MultiJson.decode(last_response.body).must_equal []
+      MultiJson.decode(last_response.body).must_equal({
+        "current" => "/v1/events/heroku.com/1342656521290",
+        "older"   => "/v1/events/heroku.com/1342656510101",
+        "events"  => {}
+      })
+    end
+
+    it "GET /v1/events/app/:cloud/:app gets events successfully" do
+      get "/v1/events/app/heroku.com/my-heroku-app"
+      MultiJson.decode(last_response.body).must_equal({
+        "current" => "/v1/events/app/heroku.com/my-heroku-app/1342656521290",
+        "older"   => "/v1/events/app/heroku.com/my-heroku-app/1342656510101",
+        "events"  => {}
+      })
+    end
+
+    it "GET /v1/events/app/:cloud/:app/:before gets events successfully" do
+      get "/v1/events/app/heroku.com/my-heroku-app/123412341324"
+      MultiJson.decode(last_response.body).must_equal({
+        "current" => "/v1/events/app/heroku.com/my-heroku-app/1342656521290",
+        "older"   => "/v1/events/app/heroku.com/my-heroku-app/1342656510101",
+        "events"  => {}
+      })
     end
   end
 end

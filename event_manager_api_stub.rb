@@ -48,7 +48,19 @@ class EventManagerAPIStub < Sinatra::Base
     respond(event, :status => 201)
   end
 
+  get "/v1/events/app/:cloud/:app/?:before?" do |cloud, app, before|
+    respond({
+      "current" => "/v1/events/app/heroku.com/#{app}/1342656521290",
+      "older"   => "/v1/events/app/heroku.com/#{app}/1342656510101",
+      "events"  => {}
+    })
+  end
+
   get "/v1/events/:cloud/?:before?" do |cloud, before|
-    MultiJson.encode([])
+    respond({
+      "current" => "/v1/events/heroku.com/1342656521290",
+      "older"   => "/v1/events/heroku.com/1342656510101",
+      "events"  => {}
+    })
   end
 end
