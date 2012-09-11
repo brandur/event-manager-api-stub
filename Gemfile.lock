@@ -39,5 +39,4 @@ DEPENDENCIES
   rack-instruments
   rack-test
   sinatra
-  slides
   thin

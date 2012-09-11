@@ -26,8 +26,7 @@ class EventManagerAPIStub < Sinatra::Base
       extra   = actual - required
 
       if missing.count > 0 || extra.count > 0
-        Slides.log :compare_fields!, :missing => missing, :extra => extra
-        raise APIError.new(422)
+        raise APIError.new(422, "missing: #{missing}; extra: #{extra}")
       end
     end
 
@@ -39,7 +38,8 @@ class EventManagerAPIStub < Sinatra::Base
 
   class APIError < StandardError
     attr_accessor :code
-    def initialize(code)
+    def initialize(code, message="")
+      super(message)
       @code = code
     end
   end
