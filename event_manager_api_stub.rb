@@ -1,12 +1,8 @@
 require "multi_json"
 
 class EventManagerAPIStub < Sinatra::Base
-  EVENT_FIELDS =
-    %w{action actor attributes cloud component target timestamp type}
-
-  def events
-    @events ||= []
-  end
+  REQUIRED_EVENT_FIELDS =
+    %w{action actor cloud component target timestamp type}
 
   helpers do
     def auth
@@ -23,10 +19,8 @@ class EventManagerAPIStub < Sinatra::Base
 
     def compare_fields!(required, actual)
       missing = required - actual
-      extra   = actual - required
-
-      if missing.count > 0 || extra.count > 0
-        raise APIError.new(422, "missing: #{missing}; extra: #{extra}")
+      if missing.count > 0
+        raise APIError.new(422, "missing: #{missing}")
       end
     end
 
@@ -50,12 +44,11 @@ class EventManagerAPIStub < Sinatra::Base
 
   post "/v1/publish/event" do
     event = MultiJson.decode(request.body.read) rescue raise(APIError.new(400))
-    compare_fields!(EVENT_FIELDS, event.keys)
-    events << event
+    compare_fields!(REQUIRED_EVENT_FIELDS, event.keys)
     respond(event, :status => 201)
   end
 
   get "/v1/events/:cloud/?:before?" do |cloud, before|
-    MultiJson.encode(events.map { |e| e["cloud"] == cloud })
+    MultiJson.encode([])
   end
 end
