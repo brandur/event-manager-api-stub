@@ -42,12 +42,15 @@ describe EventManagerAPIStub do
     it "POST /v1/publish/event with an event is successful" do
       post "/v1/publish/event", MultiJson.encode({
         "action"     => "create_app",
-        "actor"      => 1234,
+        "actor_id"   => 1234,
+        "actor"      => "user@heroku.com",
         "attributes" => {},
         "cloud"      => "heroku.com",
         "component"  => "core",
-        "owner"      => 1234,
-        "target"     => 1234,
+        "owner_id"   => 1234,
+        "owner"      => "user@heroku.com",
+        "target_id"  => 1234,
+        "target"     => "my-heroku-app",
         "timestamp"  => 123412341324,
         "type"       => "app",
       })

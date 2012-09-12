@@ -2,7 +2,7 @@ require "multi_json"
 
 class EventManagerAPIStub < Sinatra::Base
   REQUIRED_EVENT_FIELDS =
-    %w{action actor cloud component target timestamp type}
+    %w{action actor_id actor cloud component target_id target timestamp type}
 
   helpers do
     def auth
