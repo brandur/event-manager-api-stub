@@ -1,10 +1,4 @@
-require "bundler/setup"
-Bundler.require(:default, :test)
-
-require "minitest/spec"
-require "minitest/autorun"
-
-require_relative "../event_manager_api_stub"
+require "test_helper"
 
 #
 # just a couple tests to verify general sanity
@@ -17,10 +11,18 @@ describe EventManagerAPIStub do
     EventManagerAPIStub
   end
 
+  before do
+    # suppress logging
+    stub(Slides).log
+  end
+
   describe "unauthenticated" do
-    it "POST /v1/publish/event" do
+    it "POST /v1/publish/event renders 401" do
       get "/v1/publish/event"
       last_response.status.must_equal 401
+      MultiJson.decode(last_response.body).must_equal({
+        "message" => "Unauthenticated"
+      })
     end
   end
 

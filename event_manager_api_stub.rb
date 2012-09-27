@@ -4,8 +4,23 @@ class EventManagerAPIStub < Sinatra::Base
   REQUIRED_EVENT_FIELDS =
     %w{action actor_id actor cloud component timestamp}
 
-  error do
+  class APIError < RuntimeError
+    attr_accessor :code
+    def initialize(code, message="")
+      super(message)
+      @code = code
+    end
+  end
+
+  configure do
+    set :dump_errors,     false  # don't dump errors to stderr
+    set :show_exceptions, false  # don't allow sinatra's crappy error pages
+  end
+
+  error APIError, Exception do
     e = env['sinatra.error']
+    log(:error, :type => e.class.name, :message => e.message,
+      :backtrace => e.backtrace)
     respond({ :message => e.message },
       :status => e.respond_to?(:code) ? e.code : 500)
   end
@@ -20,7 +35,7 @@ class EventManagerAPIStub < Sinatra::Base
     end
 
     def authorized!
-      raise APIError.new(401) unless auth_credentials
+      raise APIError.new(401, "Unauthenticated") unless auth_credentials
     end
 
     def compare_fields!(required, actual)
@@ -30,17 +45,13 @@ class EventManagerAPIStub < Sinatra::Base
       end
     end
 
+    def log(action, attrs={})
+      Slides.log(action, attrs.merge!(:id => request.env["REQUEST_ID"]))
+    end
+
     def respond(json, options={ :status => 200 })
       [options[:status], { "Content-Type" => "application/json" },
         MultiJson.encode(json, :pretty => true)]
-    end
-  end
-
-  class APIError < StandardError
-    attr_accessor :code
-    def initialize(code, message="")
-      super(message)
-      @code = code
     end
   end
 
