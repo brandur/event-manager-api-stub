@@ -4,6 +4,12 @@ class EventManagerAPIStub < Sinatra::Base
   REQUIRED_EVENT_FIELDS =
     %w{action actor_id actor cloud component timestamp}
 
+  error do
+    e = env['sinatra.error']
+    respond({ :message => e.message },
+      :status => e.respond_to?(:code) ? e.code : 500)
+  end
+
   helpers do
     def auth
       @auth ||= Rack::Auth::Basic::Request.new(request.env)
