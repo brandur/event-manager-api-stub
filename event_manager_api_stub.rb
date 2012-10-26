@@ -18,7 +18,7 @@ class EventManagerAPIStub < Sinatra::Base
     set :show_exceptions, false  # don't allow sinatra's crappy error pages
   end
 
-  error APIError, Exception do
+  error [APIError, Exception] do
     e = env['sinatra.error']
     log(:error, :type => e.class.name, :message => e.message,
       :backtrace => e.backtrace)
