@@ -12,4 +12,5 @@ Gem::Specification.new do |gem|
   gem.files        = %w{event_manager_api_stub.rb}
 
   gem.add_dependency "multi_json"
+  gem.add_dependency "sinatra"
 end
