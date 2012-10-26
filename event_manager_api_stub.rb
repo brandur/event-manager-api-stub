@@ -1,4 +1,5 @@
 require "multi_json"
+require "sinatra"
 
 class EventManagerAPIStub < Sinatra::Base
   REQUIRED_EVENT_FIELDS =
@@ -35,7 +36,7 @@ class EventManagerAPIStub < Sinatra::Base
     end
 
     def authorized!
-      raise APIError.new(401, "Unauthenticated") unless auth_credentials
+      raise APIError.new(401, "Unauthorized") unless auth_credentials
     end
 
     def compare_fields!(required, actual)
