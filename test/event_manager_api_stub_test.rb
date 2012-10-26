@@ -21,7 +21,7 @@ describe EventManagerAPIStub do
       get "/v1/publish/event"
       last_response.status.must_equal 401
       MultiJson.decode(last_response.body).must_equal({
-        "message" => "Unauthenticated"
+        "message" => "Unauthorized"
       })
     end
   end
